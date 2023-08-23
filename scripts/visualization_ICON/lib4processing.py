@@ -22,99 +22,68 @@ import xarray as xr
 import warnings
 warnings.filterwarnings("ignore")
 
-# 1. Function --> get_ICON_data
-def get_ICON_data(pin, param, dim):
-    '''
-    Task: Get ICON data
 
-    Parameters
-    ----------
-    pin : str
-        Input path
-    param : str
-        Research parameter
-    dim : int
-        Dinemsion of data:
-            dim = 1  --> parameter has only 1 dimension (in case of ICON - only cell)
-            dim = 2  --> parameter has 2 dimensions (in case of ICON - time, cell)
-            dim = 20 --> parameter has 2 dimensions (time, cell), but you want
-                         to get data from 0 moment of time
-
-    Returns
-    -------
-    var : Array
-        Array with research parameter
-    clon : Array
-        Longitudes (in degree)
-    clat : Array
-        Latitudes (in degree)
-    '''
-    # -- Open NetCDf
-    #nc  = xr.open_dataset(pin, )
+def get_ICON_data(
+    # Input parameters:
+    pin:str,                         # Input path
+    param:str,                       # Research parameter
+    dim:int,                         # Dinemsion of data:
+                                     # dim = 1  --> parameter has only 1 dimension (in case of ICON - only cell)
+                                     # dim = 2  --> parameter has 2 dimensions (in case of ICON - time, cell)
+                                     # dim = 20 --> parameter has 2 dimensions (time, cell), but you want
+                                     # to get data from 0 moment of time
+    # Output parameters
+    ) -> tuple[
+        np.array,                    # Array with research parameter
+        np.array,                    # Array with Longitudes (in degree)
+        np.array,                    # Array with Latitudes (in degree)
+    ]:
+    """ Get ICON data """
+    # -- Open NetCDf:
     nc  = xr.open_dataset(pin)
-    #-- get variable
+    # -- Get variable:
     if dim == 1:
         var = nc[param][:].values
     elif dim == 2:
         var = nc[param][:,:].values
-    elif dim == 20:
-        var = nc[param][0,:].values
     elif dim == 3:
         var = nc[param][:,0,0].values
-        
+    elif dim == 20:
+        var = nc[param][0,:].values
     else:
         sys.exit('Dimension format for ICON data is incorrect')
-
-    #-- Use additional data corrections:
+    # -- Use additional data corrections:
     if param in ('tmin', 'tmax'):
         var = var - 273.15
-
-    #-- get coordinates and convert radians to degrees
+    # -- Get coordinates and convert radians to degrees
     clon = np.rad2deg(nc.clon.values)
     clat = np.rad2deg(nc.clat.values)
-    
     return var, clon, clat
 
-# 2. Function --> get_ICON_bnds
-def get_ICON_bnds(pin):
-    '''
-    Task: Get ICON bnds values for longitude and latitude
 
-    Parameters
-    ----------
-    pin : str
-        Input path
-
-    Returns
-    -------
-    clon: xarray
-        Longutite boundaries.
-    clat: xarray
-        Latitude boundaries.
-    '''
+def get_ICON_bnds(
+    # Input variables:
+    pin:str,                         # Input path
+    # Output variables:
+    ) -> tuple[
+        xr.DataArray,                # Longutite boundaries.
+        xr.DataArray,                # Latitude boundaries.
+    ]:
+    """ Get ICON bnds values for longitude and latitude """
     nc  = xr.open_dataset(pin)
     return nc.clon_bnds, nc.clat_bnds
 
-# 3. Function --> check_param
-def check_param(var1, var2, pname):
-    '''
-    Task: Quality control of the research data
 
-    Parameters
-    ----------
-    var1 : DataArray or Dataframe
-        First dataset
-    var2 : DataArray or Dataframe
-        Second dataset
-    pname : str
-        Research parameter
-
-    Returns
-    -------
-    prb_list : list
-        In case of different values all problematic indexis will be presented
-        in this data list
-    '''
+def check_param(
+    # Input variables:
+    var1 : xr.DataArray,             # First dataset
+    var2 : xr.DataArray,             # Second dataset
+    pname : str,                     # Research parameter
+    # Output variables:
+    ) -> list[int]:                  # In case of different values all
+                                     # problematic indexis will be presented
+                                     # in this data list
+    """ Quality control of the research data"""
     prb_list = []
     if len(var1) == len(var2):
         for i in range(len(var1)):
@@ -124,7 +93,6 @@ def check_param(var1, var2, pname):
             else:
                 if var1[i] != var2[i]:
                     prb_list.append(i)
-
     if len(prb_list) == 0:
         print(f'{pname} values in datasets are the same! \n')
     else:

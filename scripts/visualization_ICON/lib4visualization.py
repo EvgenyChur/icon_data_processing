@@ -19,12 +19,14 @@ Version    Date       Name
 import time
 import numpy as np
 import xarray as xr
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib import colors
 import cartopy.crs as ccrs
 import cartopy
 import cartopy.feature as cfeature
+from typing import Optional
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -107,12 +109,18 @@ class Plot_settings:
 
         # -- Save figure:
         if 'pout_map' in uset and len(uset.get('pout_map')) > 0:
-            pout = uset.get('pout_map')
-            plt.savefig(
-                f'{pout}.{self.plt_format}',
-                bbox_inches = self.mbbox,
-                dpi = self.msave_dpi,
-            )
+            if 'prefix' in uset and len(uset.get('prefix')) > 0:
+                plt.savefig(
+                    f"{uset.get('pout_map')}_{uset.get('prefix')}.{self.plt_format}",
+                    bbox_inches = self.mbbox,
+                    dpi = self.msave_dpi,
+                )
+            else:
+                plt.savefig(
+                    f"{uset.get('pout_map')}.{self.plt_format}",
+                    bbox_inches = self.mbbox,
+                    dpi = self.msave_dpi,
+                )
         else:
             plt.show()
 
@@ -188,7 +196,7 @@ class Plot_settings:
         if 'output' in uset and len(uset.get('output')) > 0:
             #-- Plot save
             plt.savefig(
-                uset.get('output'),
+                f"{uset.get('output')}.{self.plt_format}",
                 format = self.plt_format,
                 dpi = self.plt_dpi,
             )
@@ -245,7 +253,8 @@ def plot_mask(
         ncol = ncols,
         bbox_to_anchor = (0.5, -0.2),
     )
-
+    if 'prefix' in kwargs and len(kwargs['prefix']) > 0:
+        set4plot['prefix'] = kwargs['prefix']
     # -- Set other user settings parameters:
     maps_settings.plt_uset_maps(ax, set4plot)
 
@@ -310,6 +319,50 @@ def icon_data(
     cbar = fig.colorbar(cnf, cax=cbar_ax, orientation = 'horizontal')
     plt.setp(cbar.ax.get_xticklabels()[::2], visible = False)
     cbar.set_label(f'[{units}]')
-
+    # Add prefix to figure:
+    if 'prefix' in kwargs and len(kwargs['prefix']) > 0:
+        set4plot['prefix'] = kwargs['prefix']
     # -- Set other user settings parameters:
     maps_settings.plt_uset_maps(ax, set4plot)
+
+
+
+def get_line_plot(
+    # Input parameters:
+    mode : str,                                          # Type of input data for visualization
+    set4plot : dict,                                     # User settings for plot
+    data_xr : Optional[list[xr.DataArray]] = None,       # Input data in xarray format
+    data_df : Optional[list[pd.DataFrame]] = None,       # Input data in pd.DataFrame format
+    years : Optional[np.array] = None,                   # Actual years when xarray data
+    var : Optional[list[int]] = None,                    # Actual parameter when pd.Series
+    # Output parameters:
+    ):                                                   # Create and save output figure
+    """Create line plot for research parameter"""
+    # -- Local variables:
+    maps_settings = Plot_settings()                      # user settings class
+
+    if data_xr != None:
+        niter = len(data_xr)
+    elif data_df != None:
+        niter = len(data_df)
+
+    #-- Create plot:
+    fig = plt.figure(figsize = (12,7))
+    ax  = fig.add_subplot(111)
+    for i in range(niter):
+        # -- Define correct index and data for visualization:
+        index = years      if mode == 'DataArray' else data_df[i].index
+        data  = data_xr[i] if mode == 'DataArray' else data_df[i][var[i]]
+        # -- Add new line to the plot:
+        ax.plot(
+            index,
+            data,
+            label = set4plot.get('legends')[i],
+            color = set4plot.get('colors')[i] ,
+            linestyle = set4plot.get('styles')[i],
+         )
+    # -- Apply user settings:
+    maps_settings.plt_uset_line(ax, set4plot)
+    #-- Clean memory
+    plt.close(fig)
+    plt.gcf().clear()

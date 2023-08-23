@@ -17,36 +17,18 @@ Version    Date       Name
            Add new function 3.
 """
 
-# =============================     Import modules     ======================
+# =============================     Import modules     ==================
 import os
-
-#=============================   Personal functions   =======================
-# 1. Function --> dep_clean
+import pandas as pd
+# =============================   Personal functions   ==================
 def dep_clean(path:str):
-    '''
-    Task : Cleaning previous results
-
-    Parameters
-    ----------
-    path : Path to the folder with results.
-    '''
+    """ Cleaning previous results """
     for file in os.listdir(path):
         os.remove(path + file)
 
-# 2. Function --> makefolder
+
 def makefolder(path:str) -> tuple[str]:
-    '''
-    Task: Check and create folder
-
-    Parameters
-    ----------
-    path : Path to the folder.
-
-    Returns
-    -------
-    path_OUT : New path for output data
-    '''
-    # Create folder for output data
+    """ Check and create folder """
     try:
         # There is no folder in our output place. Create a new one
         os.makedirs(path)
@@ -55,20 +37,12 @@ def makefolder(path:str) -> tuple[str]:
         pass
     return path + '/'
 
-# 3. Function --> get_info
-def get_info(df, df_name):
-    '''
-    Task: Get common information about datasets
 
-    df : Dataframe,
-        The dataset with data for the project
-    df_name : Objects
-        The name of the dataset for information
-
-    Returns
-    -------
-    None.
-    '''
+def get_info(
+    df : pd.DataFrame,      # Dataset with data for the project
+    df_name : str,          # Name of the dataset for information
+    ):
+    """ Get common information about datasets """
     print(f'Common information about - {df_name}')
     df.info()
     print(df.columns, '\n')

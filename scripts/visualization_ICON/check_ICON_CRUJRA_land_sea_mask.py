@@ -66,7 +66,7 @@ def get_param(
         clat, 
         set4plot.get(kwargs['var']),
         var = kwargs['var'],
-    )  
+    )
     # -- Convert non nan values to 1 and nan values to 0 (create land/sea mask)
     df = pd.DataFrame(data = ds4param, columns = [kwargs['var']])
     # -- Get general information about data:
@@ -113,7 +113,7 @@ set4mask_plots = {
     'labels'    : ['Water cover', 'Land cover'],
     'vmin'      : 0,
     'vmax'      : 1,
-    'pout_map'    : f'{fout}/ICON_{var3}_new.png',
+    'pout_map'    : f'{fout}/ICON_{var3}_new',
     'lcoastline': True,
     'lgrid_map' : True,
 }
@@ -134,20 +134,20 @@ set4plot = {
     },
     # Settings for tswrf:
     'tswrf' : {
-        'title'  : 'ICON tricontourf plot',
-        'cmap'   : 'Spectral_r',
+        'title' : 'ICON tricontourf plot',
+        'cmap' : 'Spectral_r',
         'varMin' :    0.0,
         'varMax' : 1000.0,
         'varInt' :   50.0,
-        'units'  : 'W m-2',
+        'units' : 'W m-2',
         'lcoastline':True,
         'lgrid_map': True,
         'pout_map' : f'{fout}/plot_ICON_tswrf',
     },
     # Settings for fd:
     'fd' : {
-        'title'  : 'ICON tricontourf plot',
-        'cmap'   : 'Spectral_r',
+        'title' : 'ICON tricontourf plot',
+        'cmap' : 'Spectral_r',
         'varMin' :   0.0,
         'varMax' :   1.0,
         'varInt' :   0.1,
@@ -162,18 +162,18 @@ set4plot = {
 if __name__ == '__main__':
     # -- Create output folder:
     output_folder = l4s.makefolder(fout)
-    
+
     # -- 1. Get ICON data and create 2d mao (tmin, tswrf or fd datasets):
     ds4param1, clon1, clat1 = get_param(
         set4plot, pin = pin1, var = var1, dims = dims)
     ds4param2, clon2, clat2 = get_param(
-        set4plot, pin = pin2, var = var2, dims = dims)  
-    
+        set4plot, pin = pin2, var = var2, dims = dims)
+
     # -- 2. Run quality control test (lat, lon, param):
     check_lat = l4p.check_param(clat1, clat2, 'clat')
     check_lon = l4p.check_param(clon1, clon2, 'clon')
     check_var = l4p.check_param(ds4param1, ds4param2, 'land/water')
-    
+
     # -- 3. Create land/see mask:
     clon_bnds1, clat_bnds1 = l4p.get_ICON_bnds(pin1)
     mask = xr.DataArray(ds4param1)
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     mask['clon_bnds'] = clon_bnds1
     # Save new netcdf:
     mask.to_netcdf(nout)
-    
+
     # -- 4. Visualization land/sea mask:
     l4v.plot_mask(
         mask[var3], 
