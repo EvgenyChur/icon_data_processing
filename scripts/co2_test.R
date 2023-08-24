@@ -1,8 +1,4 @@
 
-
-
-
-
 ## forcing period
 startyear <- 1901
 endyear   <- 2015

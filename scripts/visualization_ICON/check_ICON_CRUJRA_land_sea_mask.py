@@ -97,23 +97,22 @@ var3 = 'ls_mask'
 dims = 20
 
 # Input paths:
-main = 'C:/Users/evchur/Desktop/DATA/FORCING_QUINCY'
-pin1 = main + f'/DATA/crujra_v2.3_R2B4_{var1}_2021.nc'
-pin2 = main + f'/DATA/crujra_v2.3_R2B4_{var2}_2021.nc'
+pin1 = f'{l4s.input_path()}/DATA/crujra_v2.3_R2B4_{var1}_2021.nc'
+pin2 = f'{l4s.input_path()}/DATA/crujra_v2.3_R2B4_{var2}_2021.nc'
 
 # output paths
-fout = 'C:/Users/evchur/Python/scripts/github/icon_data_processing/RESULTS/check_lsm'
+fout = f'{l4s.output_path()}/check_lsm'
 nout = fout + '/ls_mask.nc'
 
 #-- Settings for ICON sea/land or land/sea mask
 set4mask_plots = {
-    'title'     : 'ICON sea/land mask',
+    'title' : 'ICON sea/land mask',
     'sea_color' : 'aqua',
     'land_color': 'peru',
-    'labels'    : ['Water cover', 'Land cover'],
-    'vmin'      : 0,
-    'vmax'      : 1,
-    'pout_map'    : f'{fout}/ICON_{var3}_new',
+    'labels' : ['Water cover', 'Land cover'],
+    'vmin' : 0,
+    'vmax' : 1,
+    'pout_map' : f'{fout}/ICON_{var3}_new',
     'lcoastline': True,
     'lgrid_map' : True,
 }
@@ -122,12 +121,12 @@ set4mask_plots = {
 set4plot = {
     # Settings for tmin:
     'tmin' : {
-        'title'  : 'ICON tricontourf plot',
-        'cmap'   : 'Spectral_r',
+        'title' : 'ICON tricontourf plot',
+        'cmap' : 'Spectral_r',
         'varMin' : -50.0,
         'varMax' :  30.0,
         'varInt' :   5.0,
-        'units'  : 'deg C',
+        'units' : 'deg C',
         'lcoastline':True,
         'lgrid_map': True,
         'pout_map' : f'{fout}/plot_ICON_tmin',
@@ -151,7 +150,7 @@ set4plot = {
         'varMin' :   0.0,
         'varMax' :   1.0,
         'varInt' :   0.1,
-        'units'  : '--',
+        'units' : '--',
         'lcoastline':True,
         'lgrid_map': True,
         'pout_map' : f'{fout}/plot_ICON_fd',

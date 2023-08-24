@@ -4,14 +4,14 @@ Description: Compare LAI and GPP parameters calculated in ICON based on R2B4
              and CRUJRA forcing data
 
 Authors: Evgenii Churiulin
-                                                   
+
 Current Code Owner: MPI-BGC, Evgenii Churiulin
 phone:  +49  170 261-5104
 email:  evgenychur@bgc-jena.mpg.de
 
 History:
 Version    Date       Name
----------- ---------- ----                                                   
+---------- ---------- ----
     1.1    12.04.2023 Evgenii Churiulin, MPI-BGC
            Initial release
     1.2    23.08.2023 Evgenii Churiulin, MPI-BGC
@@ -81,7 +81,7 @@ def create_icon_map(
             pin = path2,
             param = param,
             dims = dims,
-            plt_name = plt_name2)        
+            plt_name = plt_name2)
         # Find difference between das1 and ds2
         ds4param3 = ds4param1 - ds4param2
         lst4data.append(ds4param3)
@@ -107,24 +107,20 @@ def create_icon_map(
 #================   User settings (have to be adapted)  =======================
 
 #-- Input paths:
-com_path = 'C:/Users/evchur' 
-main = f'{com_path}/Desktop/DATA/FORCING_QUINCY'
-
 # ICON monmean values:
-pin1      = main + '/DATA/jsbalone_R2B4_lnd_basic_ml_1979_1986_1p_mon_crujra.nc'
-pin2      = main + '/DATA/jsbalone_R2B4_lnd_basic_ml_1979_1986_1p_mon_GSWP3.nc'
+pin1 = f'{l4s.input_path()}/DATA/jsbalone_R2B4_lnd_basic_ml_1979_1986_1p_mon_crujra.nc'
+pin2 = f'{l4s.input_path()}/DATA/jsbalone_R2B4_lnd_basic_ml_1979_1986_1p_mon_GSWP3.nc'
 # ICON YEARMEAN values
-pin_mean1 = main + '/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_mean_crujra.nc'
-pin_mean2 = main + '/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_mean_gswp3.nc'
+pin_mean1 = f'{l4s.input_path()}/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_mean_crujra.nc'
+pin_mean2 = f'{l4s.input_path()}/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_mean_gswp3.nc'
 # ICON YEARMAX values
-pin_max1  = main + '/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_max_crujra.nc'
-pin_max2  = main + '/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_max_gswp3.nc'
+pin_max1  = f'{l4s.input_path()}/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_max_crujra.nc'
+pin_max2  = f'{l4s.input_path()}/DATA/jsbalone_R2B4_lnd_basic_ml_1985_annual_max_gswp3.nc'
 
 #-- Output paths:
-main_out = f'{com_path}/Python/scripts/github/icon_data_processing/RESULTS'
-fout = f'{main_out}/check4lai_gpp'
-fout_max = f'{main_out}/check4lai_gpp/MAX'
-fout_mean = f'{main_out}/check4lai_gpp/MEAN'
+fout = f'{l4s.output_path()}/check4lai_gpp'
+fout_max = f'{l4s.output_path()}/check4lai_gpp/MAX'
+fout_mean = f'{l4s.output_path()}/check4lai_gpp/MEAN'
 
 #-- Parameters for comparison:
 parameters = ['assimi_gross_assimilation_box', 'pheno_lai_box']
@@ -145,10 +141,10 @@ rotation = 0.0
 
 # -- Settings for linear plots (uniq):
 set4line_plot = {
-    'assimi_gross_assimilation_box'  : {
+    'assimi_gross_assimilation_box' : {
         'legends' : labels,
         'colors' : colors,
-        'styles' : styles,        
+        'styles' : styles,
         'title'  : f'{ln_title} GPP',
         'xlabel' : ln_xlabel,
         'ylabel' : 'Gross photosynthesis on tile area, mol(CO2)/m^2 (tile area) / s',
@@ -161,18 +157,18 @@ set4line_plot = {
     'pheno_lai_box' : {
         'legends' : labels,
         'colors' : colors,
-        'styles' : styles,  
+        'styles' : styles,
         'title' : f'{ln_title} LAI',
         'xlabel' : ln_xlabel,
         'ylabel' : 'leaf area index, m2 / m2',
-        'x_rotation': rotation,        
+        'x_rotation': rotation,
         'ylim_num': [0.0, 1.0, 0.1],
         'llegend' : True,
         'lgrid' : True,
         'output' : f'{fout}/LAI',
     },
-}      
- 
+}
+
 # -- Settings for 2D map with YEARMEAN values:
 set4plot_mean = {
     # Settings for GPP:
@@ -223,7 +219,7 @@ set4plot_mean = {
         'lgrid_map' : True,
         'pout_map' : f'{fout_mean}/ICON_mean',
     },
-}    
+}
 
 #-- Settings for 2D map with YEARMAX values: 
 set4plot_max = {
@@ -276,14 +272,14 @@ set4plot_max = {
         'pout_map' : f'{fout_max}/ICON_max',
     },
 }
-   
+
 # =============================    Main program   ======================
 if __name__ == '__main__':
     #-- Create output folders:
     output_folder = l4s.makefolder(fout)
     max_out  = l4s.makefolder(fout_max)
     mean_out = l4s.makefolder(fout_mean)
-    
+
     # -- 1. Get data and create linear plots:
     years = pd.date_range(tstart, tstop, freq = tstep)
     #-- Create line plots
@@ -292,7 +288,7 @@ if __name__ == '__main__':
         nc_crujra = xr.open_dataset(pin1)
         nc_gswp3  = xr.open_dataset(pin2)
         tr = nc_crujra[param][:,0,0]   
-        #-- Get data list with data (T63 --> R2B4). 
+        #-- Get data list with data (T63 --> R2B4).
         # Check legend, should be the same order.
         lst4ds = [nc_crujra[param][:,0,0], nc_gswp3[param][:,0,0]]
         #-- Create line plots:
@@ -302,7 +298,7 @@ if __name__ == '__main__':
             data_xr = lst4ds, 
             years = years,
         )
-    
+
     # -- 2. Create 2D maps:
     data_max  = create_icon_map(pin_max1 , pin_max2 , parameters, set4plot_max )
     data_mean = create_icon_map(pin_mean1, pin_mean2, parameters, set4plot_mean)

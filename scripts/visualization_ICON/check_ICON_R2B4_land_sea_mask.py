@@ -22,14 +22,12 @@ import lib4visualization as l4v
 
 # ================   User settings (have to be adapted)  =====================
 # -- Path settings:
-com_path = 'C:/Users/evchur'
-main = f'{com_path}/Desktop/DATA/FORCING_QUINCY'
 # sea/land mask
-pin_slm = main + '/slm_ICON_R2B4.nc'
+pin_slm = f'{l4s.input_path()}/slm_ICON_R2B4.nc'
 # land/sea mask
-pin_lsm = main + '/lsm_ICON_R2B4.nc'
+pin_lsm = f'{l4s.input_path()}/lsm_ICON_R2B4.nc'
 # output path
-pout = f'{com_path}/Python/scripts/github/icon_data_processing/RESULTS/res4_icon_masks'
+pout = f'{l4s.output_path()}/res4_icon_masks'
 
 #-- Settings for ICON sea/land or land/sea mask
 set4mask_plots1 = {

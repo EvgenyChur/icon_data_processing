@@ -43,11 +43,9 @@ lst4param = [
     'glac'       , 'lake'       , 'land'       ]
 
 # -- Paths settings:
-com_path = 'C:/Users/evchur'
-main = f'{com_path}/Desktop/DATA/FORCING_QUINCY'
-pin1 = main + '/bc_land_frac.nc'
-pin2 = main + '/bc_land_frac_res.nc'
-pout = f'{com_path}/Python/scripts/github/icon_data_processing/RESULTS/res4bc_control'
+pin1 = f'{l4s.input_path()}/bc_land_frac.nc'
+pin2 = f'{l4s.input_path()}/bc_land_frac_res.nc'
+pout = f'{l4s.output_path()}/res4bc_control'
 
 # -- Dimensions of data in NetCDF:
 dim4mask = 1

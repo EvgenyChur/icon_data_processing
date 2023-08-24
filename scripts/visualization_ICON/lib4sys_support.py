@@ -49,3 +49,26 @@ def get_info(
     print(f'Numbers of NaN values in the dataset - {df_name}', '\n')
     print(df.isnull().sum())
     print(f'Numbers of duplicates (explicit)in the dataset - {df_name}', '\n')
+
+
+def os_path(disk, *args, sep = '//'):
+    """ Get path to the folder"""
+    args = (disk, ) + args
+    path = sep.join(args)
+    return path
+
+
+def input_path():
+    """Create path common for all input data from ICON_QUINCY project"""
+    drive = 'C:'
+    msub = 'Users/evchur//Desktop/DATA/FORCING_QUINCY'
+    sep = '/'
+    return os_path(drive, msub, sep = sep)
+
+
+def output_path():
+    """Create path common for all output data from ICON_QUINCY project"""
+    drive = 'C:'
+    msub = 'Users/evchur/Python/scripts/github/icon_data_processing/RESULTS'
+    sep = '/'
+    return os_path(drive, msub, sep = sep)

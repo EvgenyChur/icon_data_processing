@@ -32,13 +32,11 @@ def get_data(pin:str, param:str):
 
 
 # ====================   User settings (have to be adapted)   ==========
-com_path = 'C:/Users/evchur'
-main = f'{com_path}/Desktop/DATA/FORCING_QUINCY'
 #-- FD values without night filter:
-pin1 = main + '/fd_1901-2021_daily_fld.nc'
+pin1 = f'{l4s.input_path()}/fd_1901-2021_daily_fld.nc'
 #-- FD values with night filter:
-pin2 = main + '/crujra_dmean_fld.nc'
-pout = f'{com_path}/Python/scripts/github/icon_data_processing/RESULTS/res4fd'
+pin2 = f'{l4s.input_path()}/crujra_dmean_fld.nc'
+pout = f'{l4s.output_path()}/res4fd'
 
 days = 150
 # =============================    Main program   ======================

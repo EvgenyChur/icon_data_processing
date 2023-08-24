@@ -34,11 +34,9 @@ def get_co2(path):
 
 # ================   User settings (have to be adapted)  ==============
 # -- Input and output paths:
-com_path = 'C:/Users/evchur'
-main = f'{com_path}/Desktop/DATA/FORCING_QUINCY'
-path_c02y_dc13 = main + '/DATA_CO2/delta13C_in_air_input4MIPs_GM_1850-2021_extrapolated.txt'
-path_c02y_dc14 = main + '/DATA_CO2/Delta14C_in_air_input4MIPs_SHTRNH_1850-2021_extrapolated.txt'
-fout = f'{com_path}/Python/scripts/github/icon_data_processing/RESULTS/check4delta'
+path_c02y_dc13 = f'{l4s.input_path()}/DATA_CO2/delta13C_in_air_input4MIPs_GM_1850-2021_extrapolated.txt'
+path_c02y_dc14 = f'{l4s.input_path()}/DATA_CO2/Delta14C_in_air_input4MIPs_SHTRNH_1850-2021_extrapolated.txt'
+fout = f'{l4s.output_path()}/check4delta'
 
 # -- Plot settings:
 set4plot_dc13 = {

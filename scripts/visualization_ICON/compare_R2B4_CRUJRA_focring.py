@@ -35,11 +35,9 @@ import lib4visualization as l4v
 # ================   User settings (have to be adapted)  ================
 
 # -- Input and output paths:
-com_path = 'C:/Users/evchur'
-main = f'{com_path}/Desktop/DATA/FORCING_QUINCY'
-pin1 = main + '/climate_crujra_v2.3_R2B4_1901-2021_zone_1p_annual.nc'
-pin2 = main + '/climate_crujra_v2.3_T63_1901-2021_zone_1p_annual.nc'
-fout = f'{com_path}/Python/scripts/github/icon_data_processing/RESULTS/check4forcing'
+pin1 = f'{l4s.input_path()}/climate_crujra_v2.3_R2B4_1901-2021_zone_1p_annual.nc'
+pin2 = f'{l4s.input_path()}/climate_crujra_v2.3_T63_1901-2021_zone_1p_annual.nc'
+fout = f'{l4s.output_path()}/check4forcing'
 
 # -- Parameters for comparison (forcing):
 parameters = [
